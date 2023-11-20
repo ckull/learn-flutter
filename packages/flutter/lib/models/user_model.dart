@@ -12,14 +12,14 @@ class User {
   String username;
   String created_at;
   String updated_at;
-  Map<String, String> tokens;
+  Map<String, String>? tokens;
 
   User({
     required this.id,
     required this.username,
     required this.created_at,
     required this.updated_at,
-    required this.tokens,
+    this.tokens,
   }) {}
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -28,10 +28,12 @@ class User {
       username: json['username'],
       created_at: json['created_at'],
       updated_at: json['updated_at'],
-      tokens: {
-        'accessToken': json['tokens']['access_token'],
-        'refreshToken': json['tokens']['refresh_token'],
-      },
+      tokens: json['tokens'] != null
+          ? {
+              'accessToken': json['tokens']['access_token'],
+              'refreshToken': json['tokens']['refresh_token'],
+            }
+          : null,
     );
 
     return user;

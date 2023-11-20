@@ -99,6 +99,10 @@ export class AuthService {
       },
     });
 
+    console.log('userId: ', userId);
+
+    console.log('user: ', user);
+
     if (!user || !user.hashedRT) throw new ForbiddenException('Access Denied');
 
     const refreshTokenMatches = await argon2.verify(

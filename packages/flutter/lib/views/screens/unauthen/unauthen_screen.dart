@@ -12,18 +12,20 @@ class UnauthenScreen extends StatefulWidget {
 class _UnauthenScreenState extends State<UnauthenScreen> {
   @override
   Widget build(BuildContext context) {
-    return Navigator(onGenerateRoute: (settings) {
-      switch (settings.name) {
-        case '/login':
-          return MaterialPageRoute(
-              builder: (_) => AuthPage(authType: AuthenType.login));
-        case '/register':
-          return MaterialPageRoute(
-              builder: (_) => AuthPage(authType: AuthenType.register));
-        default: // '/login'
-          return MaterialPageRoute(
-              builder: (_) => AuthPage(authType: AuthenType.login));
-      }
-    });
+    return Scaffold(body: Navigator(
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/login':
+            return MaterialPageRoute(
+                builder: (_) => AuthPage(authType: AuthenType.login));
+          case '/register':
+            return MaterialPageRoute(
+                builder: (_) => AuthPage(authType: AuthenType.register));
+          default: // '/login'
+            return MaterialPageRoute(
+                builder: (_) => AuthPage(authType: AuthenType.login));
+        }
+      },
+    ));
   }
 }

@@ -8,6 +8,11 @@ sealed class AuthState extends Equatable {
   List<Object> get props => [];
 }
 
+final class AuthIdleState extends AuthState {
+  @override
+  List<Object> get props => [];
+}
+
 final class AuthLoadingState extends AuthState {
   @override
   List<Object> get props => [];

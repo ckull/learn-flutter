@@ -36,10 +36,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: BlocProvider(
-          create: (context) => AuthBloc(),
-          child: MaterialApp(
-            home: MainScreen(),
-          ),
-        ));
+            create: (context) => AuthBloc(),
+            child: MaterialApp(
+              home: MainScreen(),
+            )));
   }
 }

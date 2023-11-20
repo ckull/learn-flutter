@@ -8,18 +8,21 @@ import 'package:first_project/views/screens/feature/feature_screen.dart';
 import 'package:first_project/views/screens/setting/setting_screen.dart';
 import 'package:first_project/widgets/navigation/drawer.dart';
 
-const menuList = [
+const List<Map<String, dynamic>> menuList = [
   {
     'title': 'Home',
-    'route': '/',
+    'route': '/home',
+    'element': HomeScreen(),
   },
   {
     'title': 'Feature',
     'route': '/feature',
+    'element': FeatureScreen(),
   },
   {
     'title': 'Setting',
     'route': '/setting',
+    'element': SettingScreen(),
   },
 ];
 
@@ -35,8 +38,9 @@ class _AuthenticatedLayoutState extends State<AuthenticatedLayout> {
     setState(() {
       _selectedIndex = index;
     });
+    // Navigator.pushNamed(context, (menuList[index]['route'] as String));
 
-    Navigator.pushNamed(context, menuList[index]['route']!);
+    Navigator.pop(context);
   }
 
   @override
@@ -46,27 +50,27 @@ class _AuthenticatedLayoutState extends State<AuthenticatedLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Authenticated Layout')),
-        body: Navigator(
-          onGenerateRoute: (settings) {
-            switch (settings.name) {
-              case '/':
-                return MaterialPageRoute(builder: (_) => const HomeScreen());
-              case '/feature':
-                return MaterialPageRoute(builder: (_) => const FeatureScreen());
-              case '/setting':
-                return MaterialPageRoute(builder: (_) => const SettingScreen());
-              default:
-                return MaterialPageRoute(builder: (_) => const HomeScreen());
-            }
-          },
-        ),
-        drawer: DrawerMenu(
-            menuList: menuList,
-            onTapped: _onItemTapped,
-            selectedIndex: _selectedIndex),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Authenticated Layout')),
+      body: menuList[_selectedIndex]['element'],
+      // body: Navigator(
+      //   onGenerateRoute: (settings) {
+      //     switch (settings.name) {
+      //       case '/home':
+      //         return MaterialPageRoute(builder: (_) => HomeScreen());
+      //       case '/feature':
+      //         return MaterialPageRoute(builder: (_) => FeatureScreen());
+      //       case '/setting':
+      //         return MaterialPageRoute(builder: (_) => SettingScreen());
+      //       default: // '/home'
+      //         return MaterialPageRoute(builder: (_) => HomeScreen());
+      //     }
+      //   },
+      // ),
+      drawer: DrawerMenu(
+        menuList: menuList,
+        selectedIndex: _selectedIndex,
+        onTapped: _onItemTapped,
       ),
     );
   }

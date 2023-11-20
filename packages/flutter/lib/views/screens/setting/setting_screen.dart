@@ -21,10 +21,12 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        return Container(
-          child: Column(children: [
-            Text('Setting Screen'),
-          ]),
+        return Center(
+          child: Container(
+            child: Column(children: [
+              Text('Setting Screen'),
+            ]),
+          ),
         );
       },
     );

@@ -20,23 +20,19 @@ class AuthService {
   static const String verifyPath = 'token/verify/';
 
   static Future<User> loadUser() async {
-    final json = await SecureStorageService.storage.read(
-      key: SecureStorageService.userKey,
-    );
-
-    if (json != null) {
-      try {
-        final user = await Api().api.get('/auth/user');
-        return User.fromJson(user.data);
-      } catch (err) {
-        throw Exception(err);
-      }
-    } else {
-      return Future.error('No user found!');
+    try {
+      final user = await Api().api.get('auth/user');
+      final json = jsonDecode(user.toString());
+      print(json);
+      return User.fromJson(json);
+    } catch (err) {
+      print('error: $err.toString()');
+      throw Exception(err);
     }
   }
 
   static void saveTokens(Map<String, String> tokens) async {
+    print('saveTokens: ${tokens.toString()}');
     await SecureStorageService.storage.write(
       key: SecureStorageService.accessTokenKey,
       value: tokens['accessToken'].toString(),
@@ -48,38 +44,49 @@ class AuthService {
     );
   }
 
-  static void saveUser(dynamic user) async {
-    await SecureStorageService.storage.write(
-      key: SecureStorageService.userKey,
-      value: user.toJson(),
-    );
-  }
-
-  static Future<void> refreshToken(User user) async {
-    final response = await http.post(
-      HelperService.buildUri(refreshPath),
-      headers: HelperService.buildHeaders(),
-      body: jsonEncode(
-        {
-          'refreshToken': user.tokens['refreshToken'],
-        },
-      ),
-    );
-
-    final statusType = (response.statusCode / 100).floor() * 100;
-    switch (statusType) {
-      case 200:
-        final json = jsonDecode(response.body);
-        user.tokens['accessToken'] = json['access'];
-        saveUser(user);
-        break;
-      case 400:
-      case 300:
-      case 500:
-      default:
-        throw Exception('Error contacting the server!');
+  static void saveStorage(String key, String value) async {
+    try {
+      await SecureStorageService.storage.write(
+        key: key,
+        value: value,
+      );
+    } catch (err) {
+      throw Exception(err);
     }
   }
+
+  static void saveUser(int userId) async {
+    await SecureStorageService.storage.write(
+      key: SecureStorageService.userKey,
+      value: userId.toString(),
+    );
+  }
+
+  // static Future<void> refreshToken(User user) async {
+  //   final response = await http.post(
+  //     HelperService.buildUri(refreshPath),
+  //     headers: HelperService.buildHeaders(),
+  //     body: jsonEncode(
+  //       {
+  //         'refreshToken': user.tokens['refreshToken'],
+  //       },
+  //     ),
+  //   );
+
+  //   final statusType = (response.statusCode / 100).floor() * 100;
+  //   switch (statusType) {
+  //     case 200:
+  //       final json = jsonDecode(response.body);
+  //       user.tokens['accessToken'] = json['access'];
+  //       saveUser(user);
+  //       break;
+  //     case 400:
+  //     case 300:
+  //     case 500:
+  //     default:
+  //       throw Exception('Error contacting the server!');
+  //   }
+  // }
 
   static Future<User> register({
     required String email,
@@ -108,7 +115,7 @@ class AuthService {
         final json = jsonDecode(response.body);
         final user = User.fromJson(json);
 
-        saveUser(user);
+        // saveUser(user);
 
         return user;
       case 400:
@@ -152,6 +159,8 @@ class AuthService {
       // print('response: ' + response.toString());
       final json = jsonDecode(response.toString());
       final user = User.fromJson(json);
+
+      saveUser(user.id);
       return user;
     } catch (err) {
       throw Exception(err);

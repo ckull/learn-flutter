@@ -23,18 +23,33 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        return Container(
-          child: Column(children: [
-            Text('Home Screen'),
-            if (state is AuthAuthenticatedState) Text(state.user.toJson()),
-            ElevatedButton(
-              onPressed: () {
-                final authBloc = BlocProvider.of<AuthBloc>(context);
-                authBloc.add(AuthLogoutEvent());
-              },
-              child: Text('Logout'),
-            ),
-          ]),
+        return Center(
+          child: Container(
+            child: Column(children: [
+              Text('Home Screen'),
+              if (state is AuthLoadingState) CircularProgressIndicator(),
+              if (state is AuthAuthenticatedState) Text(state.user.toJson()),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      final authBloc = BlocProvider.of<AuthBloc>(context);
+                      authBloc.add(AuthLogoutEvent());
+                    },
+                    child: Text('Logout'),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      final authBloc = BlocProvider.of<AuthBloc>(context);
+                      authBloc.add(AuthLoadUserEvent());
+                    },
+                    child: Text('Fetch User'),
+                  ),
+                ],
+              )
+            ]),
+          ),
         );
       },
     );

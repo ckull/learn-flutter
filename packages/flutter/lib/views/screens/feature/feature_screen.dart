@@ -21,10 +21,12 @@ class _FeatureScreenState extends State<FeatureScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        return Container(
-          child: Column(children: [
-            Text('Feature Screen'),
-          ]),
+        return Center(
+          child: Container(
+            child: Column(children: [
+              Text('Feature Screen'),
+            ]),
+          ),
         );
       },
     );

@@ -5,6 +5,11 @@ sealed class AuthEvent extends Equatable {
   const AuthEvent();
 }
 
+class AuthIdleEvent extends AuthEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class AuthLoadUserEvent extends AuthEvent {
   @override
   List<Object> get props => [];

@@ -15,7 +15,7 @@ class MainScreen extends StatelessWidget {
       if (state is AuthAuthenticatedState) {
         return AuthenticatedLayout();
       } else if (state is AuthUnauthenticatedState) {
-        return UnauthenScreen();
+        return const UnauthenScreen();
       } else if (state is AuthLoadingState) {
         return Scaffold(
           body: Center(
@@ -23,11 +23,7 @@ class MainScreen extends StatelessWidget {
           ),
         );
       } else {
-        return Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return UnauthenScreen();
       }
     });
   }
